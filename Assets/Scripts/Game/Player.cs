@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CoreGameOptions;
 
-public class Player : MonoBehaviour
+public class Player
 {
     private PlayerType playerType = PlayerType.REAL;
     private Weapon weaponOfChoice = Weapon.NONE;

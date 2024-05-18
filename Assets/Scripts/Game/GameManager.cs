@@ -166,6 +166,8 @@ public class GameManager : MonoBehaviour
         {
             players[i].ResetWeapon();
         }
+
+        UpdateOpponentTextEvent.Invoke(Weapon.NONE);
     }
 
     public void TimeUp()
@@ -195,6 +197,12 @@ public class GameManager : MonoBehaviour
 
             Debug.LogError("PLAYER id "+players[i].GetPlayerId+ " Score : "  + players[i].GetPlayerScore);
         }
+
+
+        if(roundData.GetScoreForPlayer("2") > 0)
+        {
+            GameEnd();
+        }
     }
 
     void FetchInputs()
@@ -209,6 +217,13 @@ public class GameManager : MonoBehaviour
                         players[i].SetRandomWeapon();
                         UpdateOpponentTextEvent.Invoke(players[i].GetPlayerWeapon);
                     }
+                    else
+                    {
+                        if(players[i].GetPlayerWeapon == Weapon.NONE)
+                        {
+                            GameEnd();
+                        }
+                    }
                 }
 
                 break;
@@ -221,6 +236,28 @@ public class GameManager : MonoBehaviour
     public void SetPlayerInput(Weapon weapon)
     {
         player.UpdateWeaponChoice(weapon);
+    }
+
+    public void GameEnd()
+    {
+        Debug.LogError("GAME END");
+        if(PlayerPrefs.HasKey("HS"))
+        {
+            int hs = PlayerPrefs.GetInt("HS");
+
+            if(player.GetPlayerScore > hs)
+            {
+                PlayerPrefs.SetInt("HS", player.GetPlayerScore);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("HS", player.GetPlayerScore);
+        }
+
+        Debug.LogError("High score " + PlayerPrefs.GetInt("HS"));
+
+        SceneHandler.GetInstance.LoadMainMenu();
     }
 
     public void OnDestroy()
