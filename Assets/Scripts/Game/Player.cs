@@ -31,4 +31,9 @@ public class Player : MonoBehaviour
     {
         weaponOfChoice =(Weapon)Random.Range(1, 5);
     }
+
+    public void ResetWeapon()
+    {
+        weaponOfChoice = Weapon.NONE;
+    }
 }

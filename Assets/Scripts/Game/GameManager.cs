@@ -7,6 +7,9 @@ using System;
 
 namespace CoreGameOptions
 {
+
+    public delegate void StartNextRoundDelegate();
+
     public enum GameMode
     {
         BOT,
@@ -87,6 +90,8 @@ public class GameManager : MonoBehaviour
     private List<RoundData> roundsData;
     private BattleDecider battleDecider;
 
+    public static StartNextRoundDelegate StartNextRoundEvent;
+
     List<Player> players;
     Player player;
 
@@ -124,6 +129,8 @@ public class GameManager : MonoBehaviour
             players.Add(bot);
 
         }
+
+        StartNextRoundEvent += StartRound;
     }
 
     void StartGame()
@@ -135,13 +142,23 @@ public class GameManager : MonoBehaviour
     void StartRound()
     {
         Debug.LogError("Start round");
+        ResetPlayerWeapons();
+        timeHandler.ResetTimer();
         inputHandler.SetCanTakeInput(true);
-        timeHandler.ResetTimer();     
+        
        
         //Update Scores
         //Update UI
         //Reset Scores
         //StartNext round
+    }
+
+    private void ResetPlayerWeapons()
+    {
+        for(int i = 0; i< players.Count; i++)
+        {
+            players[i].ResetWeapon();
+        }
     }
 
     public void TimeUp()
@@ -191,9 +208,8 @@ public class GameManager : MonoBehaviour
         player.UpdateWeaponChoice(weapon);
     }
 
-   [ContextMenu("ResetTimer")]
-   public void ResetTimer()
+    public void OnDestroy()
     {
-        timeHandler.ResetTimer();
+        StartNextRoundEvent = null;
     }
 }
