@@ -46,6 +46,7 @@ public class BattleDecider : MonoBehaviour
 
                     if(didCurrentPlayerWin)
                     {
+                        Debug.LogError("Player " + currentPlayer.GetPlayerId + " WON ");
                         currentPlayer.IncreaseRoundScore();
                     }
                 }

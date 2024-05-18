@@ -26,7 +26,12 @@ public class InputHandler : MonoBehaviour
         lizardButton.onClick.AddListener(() => UpdatePlayerInput(Weapon.LIZARD));
         spockButton.onClick.AddListener(() => UpdatePlayerInput(Weapon.SPOCK));
 
-        gameManager = GameManager.getInstance;
+       
+    }
+
+    public void UpdateGameManager(GameManager gm)
+    {
+        gameManager = gm;
     }
 
     public void SetCanTakeInput(bool value)

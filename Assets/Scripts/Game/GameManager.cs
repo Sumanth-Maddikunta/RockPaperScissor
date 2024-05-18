@@ -35,7 +35,9 @@ namespace CoreGameOptions
         private Weapon choiceOfWeapon;
         private int roundScore;
 
+        public string GetPlayerId { get { return playerId; } }
         public Weapon GetPlayerWeapon { get { return choiceOfWeapon; } }
+
         public void UpdateRoundData(string playerId, Weapon weapon)
         {
             this.playerId = playerId;
@@ -105,9 +107,11 @@ public class GameManager : MonoBehaviour
     void SetupGame()
     {
         timeHandler.SetupTimeHandler(roundTime,this);
+        inputHandler.UpdateGameManager(this);
         roundsData = new List<RoundData>();
         gameMode = GameMode.BOT;
         battleDecider = new BattleDecider();
+        players = new List<Player>();
 
         if(gameMode == GameMode.BOT)
         {
@@ -130,10 +134,9 @@ public class GameManager : MonoBehaviour
 
     void StartRound()
     {
+        Debug.LogError("Start round");
         inputHandler.SetCanTakeInput(true);
-        timeHandler.ResetTimer();
-        FetchInputs();
-        CreateRoundDataAndDecideBattle();
+        timeHandler.ResetTimer();     
        
         //Update Scores
         //Update UI
@@ -143,7 +146,9 @@ public class GameManager : MonoBehaviour
 
     public void TimeUp()
     {
-        inputHandler.SetCanTakeInput(false);       
+        inputHandler.SetCanTakeInput(false);
+        FetchInputs();
+        CreateRoundDataAndDecideBattle();
     }
 
     void CreateRoundDataAndDecideBattle()
