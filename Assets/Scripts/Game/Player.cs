@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private string playerId;
     private int score = 0;
 
+    public int GetPlayerScore { get { return score; } }
     public PlayerType GetPlayerType{ get { return playerType;}}
     public Weapon GetPlayerWeapon { get { return weaponOfChoice; } }
     public string GetPlayerId { get { return playerId; } }
@@ -35,5 +36,10 @@ public class Player : MonoBehaviour
     public void ResetWeapon()
     {
         weaponOfChoice = Weapon.NONE;
+    }
+
+    public void AddScore(int add)
+    {
+        score += add;
     }
 }

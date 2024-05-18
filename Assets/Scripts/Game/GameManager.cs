@@ -7,8 +7,8 @@ using System;
 
 namespace CoreGameOptions
 {
-
     public delegate void StartNextRoundDelegate();
+    public delegate void UpdateOpponentTextDelegate(Weapon weapon);
 
     public enum GameMode
     {
@@ -38,6 +38,7 @@ namespace CoreGameOptions
         private Weapon choiceOfWeapon;
         private int roundScore;
 
+        public int GetRoundScore { get { return roundScore; } }
         public string GetPlayerId { get { return playerId; } }
         public Weapon GetPlayerWeapon { get { return choiceOfWeapon; } }
 
@@ -67,6 +68,11 @@ namespace CoreGameOptions
         {
             roundNumber = roundCount;
         }
+
+        public int GetScoreForPlayer(string playerId)
+        {
+            return playerRoundsData.Find(x => x.GetPlayerId == playerId).GetRoundScore;
+        }
     }
 
 }
@@ -91,6 +97,7 @@ public class GameManager : MonoBehaviour
     private BattleDecider battleDecider;
 
     public static StartNextRoundDelegate StartNextRoundEvent;
+    public static UpdateOpponentTextDelegate UpdateOpponentTextEvent;
 
     List<Player> players;
     Player player;
@@ -181,6 +188,13 @@ public class GameManager : MonoBehaviour
 
         RoundData roundData = battleDecider.DecideBattle(playerRoundDatas,currentRoundCount);
         roundsData.Add(roundData);
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].AddScore(roundData.GetScoreForPlayer(players[i].GetPlayerId));
+
+            Debug.LogError("PLAYER id "+players[i].GetPlayerId+ " Score : "  + players[i].GetPlayerScore);
+        }
     }
 
     void FetchInputs()
@@ -193,6 +207,7 @@ public class GameManager : MonoBehaviour
                     if(players[i].GetPlayerType == PlayerType.BOT)
                     {
                         players[i].SetRandomWeapon();
+                        UpdateOpponentTextEvent.Invoke(players[i].GetPlayerWeapon);
                     }
                 }
 
