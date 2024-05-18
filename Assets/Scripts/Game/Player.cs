@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     private int score = 0;
 
     public PlayerType GetPlayerType{ get { return playerType;}}
+    public Weapon GetPlayerWeapon { get { return weaponOfChoice; } }
+    public string GetPlayerId { get { return playerId; } }
 
     public void SetInitialData(PlayerType playerType,string playerName, string playerId)
     {

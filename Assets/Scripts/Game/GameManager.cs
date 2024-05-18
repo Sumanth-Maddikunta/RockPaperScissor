@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CoreGameOptions;
 using UnityEngine.UI;
+using System;
 
 namespace CoreGameOptions
 {
@@ -33,12 +34,34 @@ namespace CoreGameOptions
         private string playerId;
         private Weapon choiceOfWeapon;
         private int roundScore;
+
+        public Weapon GetPlayerWeapon { get { return choiceOfWeapon; } }
+        public void UpdateRoundData(string playerId, Weapon weapon)
+        {
+            this.playerId = playerId;
+            choiceOfWeapon = weapon;
+        }
+
+        public void IncreaseRoundScore()
+        {
+            roundScore++;
+        }
     }
 
     public class RoundData
     {
         private int roundNumber;
         List<PlayerRoundData> playerRoundsData;
+
+        public void SetPlayerRoundsData(List<PlayerRoundData> data)
+        {
+            playerRoundsData = data;
+        }
+
+        internal void SetRoundCount(int roundCount)
+        {
+            roundNumber = roundCount;
+        }
     }
 
 }
@@ -110,7 +133,8 @@ public class GameManager : MonoBehaviour
         inputHandler.SetCanTakeInput(true);
         timeHandler.ResetTimer();
         FetchInputs();
-        battleDecider.DecideBattle(players);
+        CreateRoundDataAndDecideBattle();
+       
         //Update Scores
         //Update UI
         //Reset Scores
@@ -120,6 +144,21 @@ public class GameManager : MonoBehaviour
     public void TimeUp()
     {
         inputHandler.SetCanTakeInput(false);       
+    }
+
+    void CreateRoundDataAndDecideBattle()
+    {
+        List<PlayerRoundData> playerRoundDatas = new List<PlayerRoundData>();
+
+        for (int i = 0; i< players.Count;i++)
+        {
+            PlayerRoundData playerRoundData = new PlayerRoundData();
+            playerRoundData.UpdateRoundData(players[i].GetPlayerId, players[i].GetPlayerWeapon);
+            playerRoundDatas.Add(playerRoundData);
+        }
+
+        RoundData roundData = battleDecider.DecideBattle(playerRoundDatas,currentRoundCount);
+        roundsData.Add(roundData);
     }
 
     void FetchInputs()
