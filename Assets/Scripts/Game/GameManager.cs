@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
     private bool canPlay = false;
     public bool canPlayGetter { get { return canPlay; } }
 
-    public const float roundTime = 5f;
+    public const float roundTime = 3f;
     public TimeHandler timeHandler;
     public InputHandler inputHandler;
 
