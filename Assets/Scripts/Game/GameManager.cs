@@ -152,8 +152,9 @@ public class GameManager : MonoBehaviour
         ResetPlayerWeapons();
         timeHandler.ResetTimer();
         inputHandler.SetCanTakeInput(true);
-        
-       
+        UIHandler.EnableNextRoundButtonDelegateEvent(false);
+
+
         //Update Scores
         //Update UI
         //Reset Scores
@@ -175,6 +176,7 @@ public class GameManager : MonoBehaviour
         inputHandler.SetCanTakeInput(false);
         FetchInputs();
         CreateRoundDataAndDecideBattle();
+        UIHandler.EnableNextRoundButtonDelegateEvent(true);
     }
 
     void CreateRoundDataAndDecideBattle()
